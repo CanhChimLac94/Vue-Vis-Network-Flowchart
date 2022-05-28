@@ -1,0 +1,64 @@
+$active_color: #6ab8ed;
+$bg-img: url(../../assets/bg.png);
+
+.row{
+  display: flex;
+  width: 100%;
+}
+.col{
+  flex-grow: 0;
+}
+
+.map-acions{
+  border: 1px solid #ddccdd;
+  padding: 25px 15px;
+  min-width: 25px;
+  width: 10%;
+  button{
+    padding: 15px 10px;
+    border: 1px solid #ddccdd;    
+    border-radius: 4px;
+    margin-bottom: 10px;
+    width: 100%;
+    cursor: pointer;
+    &.active{
+      border-color: $active_color;
+      color: $active_color;
+    }
+    &.drag{
+      cursor: move;
+    }
+  }
+}
+.map-flow{
+  border: 1px solid #ddccdd;
+  border-left: none;
+  // background-repeat: repeat;
+  .context-menus{
+    position: absolute;
+    top: 10px;
+    display: none;
+    // left: 10px;
+    &.show{
+      display: block;
+    }
+    ul{
+      padding: 0px;
+      border-radius: 5px;
+      background-color: #FFF;
+      box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+      li{
+        list-style: none;
+        padding: 10px;
+        color: #333;
+        border-bottom: 1px solid #ddccdd;
+        cursor: pointer;
+        &:hover{
+          color: #FFF;
+          background-color: $active_color;
+        }
+        // background-color: $active_color;
+      }
+    }
+  }
+}
