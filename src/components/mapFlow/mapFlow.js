@@ -1,5 +1,5 @@
 // import { DataSet, Network } from "vue-vis-network";
-import { DataSet, Network } from "../visNetworkCustom/visNetwork";
+import { DataSet, Network } from "../vueVisNetwork/visNetwork";
 import { contact, node } from "./shape";
 
 import { MODE } from "./constan";

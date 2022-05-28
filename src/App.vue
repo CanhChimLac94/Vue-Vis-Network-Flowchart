@@ -7,9 +7,7 @@
 </template>
 
 <script>
-// import HelloWorldVue from "./components/HelloWorld.vue";
 import mapFlow from "./components/mapFlow";
-// import NetWork from "./components/visNetworkCustom/Network.vue";
 
 export default {
   name: "App",
