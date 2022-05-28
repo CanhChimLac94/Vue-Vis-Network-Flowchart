@@ -152,7 +152,7 @@ const diamond = (options) => {
       };
       return {
         drawNode,
-        nodeDimensions: { width: r * 2, height: r * 2, top: 10, right: 10 }
+        nodeDimensions: { width: r * 2, height: r * 2, top: 10, right: 10, parseType: null }
       };
     }
   };
@@ -168,39 +168,40 @@ const contact = (options = {}) => {
     from,
     to,
     arrows: {
+      middle: false,
       to: {
         type: "vee",
-        enabled: true
+        enabled: true,
+        scaleFactor: 0.5
       },
       from: {
         type: "circle",
-        enabled: true
+        enabled: true,
+        scaleFactor: 0.5
       }
     },
     smooth: false,
     physics: false,
     chosen: {
       edge: (values, id, selected, hovering) => {
-        // console.log("chosen edge", { values, id, selected, hovering });
       }
     },
     color: {
       color: `${_stroke_color_selected}`,
       highlight: `${_stroke_color_selected}`,
-      // hover: "#848484",
       inherit: "from",
       opacity: "1.0"
     },
     selectionWidth: 1,
-    arrowStrikethrough: true,
     selfReference: {
       size: 30,
       renderBehindTheNode: false
+    },
+    endPointOffset: {
+      arrowStrikethrough: true,
+      from: -1,
+      to: -1
     }
-    // endPointOffset: {
-    //   from: 100,
-    //   to: -100
-    // }
     // dashes: true
   };
 };
