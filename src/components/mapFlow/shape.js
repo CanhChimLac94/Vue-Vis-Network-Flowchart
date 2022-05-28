@@ -128,31 +128,51 @@ const diamond = (options) => {
     shape: "custom",
     // shape: "hexagon",
 
-    ctxRenderer: function ({ ctx, id, x, y, state: { selected, hover }, style }) {
-      const r = style.size;
-      console.log({ ctx, id, x, y, state: { selected, hover }, style });
-      const drawNode = () => {
-        ctx.beginPath();
-        const sides = 6;
-        const a = (Math.PI * 2) / sides;
-        ctx.moveTo(x, y + r);
-        for (let i = 1; i < sides; i++) {
-          ctx.lineTo(x + r * Math.sin(a * i), y + r * Math.cos(a * i));
-        }
-        ctx.closePath();
-        ctx.save();
-        ctx.fillStyle = "rgba(255, 255, 255, 0.5)";
-        ctx.fill();
-        ctx.stroke();
-        ctx.restore();
-
-        ctx.font = "normal 12px sans-serif";
-        ctx.fillStyle = "black";
-        ctx.fillText("custom shape", x - r + 10, y, 2 * r - 20);
-      };
+    ctxRenderer: function ({
+      ctx,
+      id,
+      x,
+      y,
+      state: { selected, hover },
+      style
+    }) {
+      const diamondShape = { dx: 32, dy: 32 };
+      const shape = diamondShape;
+      const borderDashes = this.options?.shapeProperties?.borderDashes;
       return {
-        drawNode,
-        nodeDimensions: { width: r * 2, height: r * 2, top: 10, right: 10 }
+        drawNode() {
+          ctx.strokeStyle = "cornflowerblue";
+          ctx.lineWidth = 4;
+          if (Array.isArray(borderDashes)) {
+            ctx.setLineDash(borderDashes);
+          }
+          ctx.beginPath();
+          ctx.moveTo(x, y - shape.dy);
+          ctx.lineTo(x + shape.dx, y);
+          ctx.lineTo(x, y + shape.dy);
+          ctx.lineTo(x - shape.dx, y);
+          ctx.closePath();
+          ctx.stroke();
+
+          ctx.fillStyle = selected ? "#efeffb" : "#ffffff";
+          ctx.fill();
+
+          ctx.fillStyle = "black";
+          // ctx.font = FONT;
+          const textMeasurement = ctx.measureText("IF");
+          const lineHeight =
+            textMeasurement.actualBoundingBoxAscent +
+            textMeasurement.actualBoundingBoxDescent;
+          ctx.fillText(
+            "IF",
+            x - Math.round(textMeasurement.width / 2),
+            y + Math.round(lineHeight / 2)
+          );
+        },
+        nodeDimensions: {
+          width: shape.dx * 2,
+          height: shape.dy * 2
+        }
       };
     }
   };

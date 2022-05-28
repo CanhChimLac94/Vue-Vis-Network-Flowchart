@@ -1,5 +1,5 @@
 {
-  "name": "vue-flow-chart-vis",
+  "name": "vue-vis-network-flowchart",
   "version": "0.1.0",
   "private": true,
   "scripts": {
