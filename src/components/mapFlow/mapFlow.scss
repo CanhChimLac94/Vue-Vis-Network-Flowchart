@@ -1,60 +1,65 @@
 $active_color: #6ab8ed;
 $bg-img: url(../../assets/bg.png);
 
-.row{
+.row {
   display: flex;
   width: 100%;
 }
-.col{
+.col {
   flex-grow: 0;
 }
 
-.map-acions{
+.map-acions {
   border: 1px solid #ddccdd;
   padding: 25px 15px;
   min-width: 25px;
   width: 10%;
-  button{
+  
+  button {
     padding: 15px 10px;
-    border: 1px solid #ddccdd;    
+    border: 1px solid #ddccdd;
     border-radius: 4px;
     margin-bottom: 10px;
     width: 100%;
     cursor: pointer;
-    &.active{
+    &.active {
       border-color: $active_color;
       color: $active_color;
     }
-    &.drag{
+    &.drag {
       cursor: move;
+    }
+    .img-btn-drag {
+      max-width: 100%;
+      width: 100%;
     }
   }
 }
-.map-flow{
+.map-flow {
   border: 1px solid #ddccdd;
   border-left: none;
   // background-repeat: repeat;
-  .context-menus{
+  .context-menus {
     position: absolute;
     top: 10px;
     display: none;
     // left: 10px;
-    &.show{
+    &.show {
       display: block;
     }
-    ul{
+    ul {
       padding: 0px;
       border-radius: 5px;
-      background-color: #FFF;
+      background-color: #fff;
       box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
-      li{
+      li {
         list-style: none;
         padding: 10px;
         color: #333;
         border-bottom: 1px solid #ddccdd;
         cursor: pointer;
-        &:hover{
-          color: #FFF;
+        &:hover {
+          color: #fff;
           background-color: $active_color;
         }
         // background-color: $active_color;

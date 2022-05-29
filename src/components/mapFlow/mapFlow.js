@@ -4,14 +4,18 @@ import { contact, node } from "./shape";
 
 import { MODE } from "./constan";
 
+const imgCard = require('../../assets/card.png');
+const imgProccess = require('../../assets/proccess.png');
+const imgIF = require('../../assets/If.png');
+
 const btnNode = (mode, title) => {
   return {mode, title}
 }
 
 const btnNodes = [
-  new btnNode(MODE.ADD_PROCCESS, `Drag Proccess`),
-  new btnNode(MODE.ADD_CARD, `Drag Card`),
-  new btnNode(MODE.ADD_DIAMOND, `Drag Diamond`),
+  new btnNode(MODE.ADD_PROCCESS, `<img src="${ imgProccess }" class="img-btn-drag" style="max-width: 100%;" />`),
+  new btnNode(MODE.ADD_CARD, `<img src="${ imgCard }" class="img-btn-drag" style="max-width: 100%;" />`),
+  new btnNode(MODE.ADD_DIAMOND, `<img src="${ imgIF }" class="img-btn-drag" style="max-width: 100%;" />`),
 ];
 
 export default {
