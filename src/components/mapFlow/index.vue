@@ -14,12 +14,12 @@
 
       <button
         :class="isActionMode(MODE.ADD_CONTACT) ? 'active' : ''"
+        class="link"
         @click="addContactClick"
       >
         Link
       </button>
     </div>
-    <!-- <img alt="Vue logo" src="../../assets/bg.png" /> -->
     <div
       class="col map-flow"
       :style="{
@@ -33,12 +33,9 @@
         :options="options"
         @click="onClickMap"
         @select-node="selectNode"
-        @edges-add="edgesEvent"
-        @before-drawing="drawBg"
-        @control-node-dragging="controlNodeDragging"
-        @dragging="dragging"
-        @hover-edge="hoverEdge"
         @on-drop="ondropMap"
+        @after-drawing="afterDrawing"
+
       ></network>
       <!-- @after-drawing="drawBg" -->
 

@@ -3,6 +3,9 @@ import { MODE } from "./constan";
 const _stroke_color_selected = "#6ab8ed";
 const _stroke_color = "#cdcdcd";
 
+const { round: r, abs, sqrt, atan, sin, cos, tan, PI } = Math;
+const diamondShape = { x: 32, y: 32 };
+
 const nodeBase = (options) => {
   const id = options.id || Date.now();
   const x = options.x || null;
@@ -12,6 +15,7 @@ const nodeBase = (options) => {
     id,
     x,
     y,
+    type: options.type || 'card',
     shape: "ellipse",
     fixed: false,
     physics: false,
@@ -154,7 +158,7 @@ const diamond = (options) => {
           ctx.closePath();
           ctx.stroke();
 
-          ctx.fillStyle = selected ? "#efeffb" : "#ffffff";
+          ctx.fillStyle = selected ? "rgba(255, 255, 255, 0.5)" : "rgba(255, 255, 255, 0.5)";
           ctx.fill();
 
           ctx.fillStyle = "black";
@@ -184,22 +188,24 @@ const contact = (options = {}) => {
   if (!from || !to) {
     return;
   }
+  let arrows = {
+    middle: false,
+    to: {
+      type: "vee",
+      enabled: true,
+      scaleFactor: 1
+    },
+    from: {
+      type: "circle",
+      enabled: true,
+      scaleFactor: 1
+    },
+    ...options.arrows || {},
+  };
   return {
     from,
     to,
-    arrows: {
-      middle: false,
-      to: {
-        type: "vee",
-        enabled: true,
-        scaleFactor: 1
-      },
-      from: {
-        type: "circle",
-        enabled: true,
-        scaleFactor: 1
-      }
-    },
+    arrows,
     smooth: false,
     physics: false,
     chosen: {
@@ -213,17 +219,63 @@ const contact = (options = {}) => {
       opacity: "1.0"
     },
     selectionWidth: 1,
-    selfReference: {
-      size: 30,
-      renderBehindTheNode: false
-    },
-    arrowStrikethrough: false,
-    endPointOffset: {
-      from: -1,
-      to: -1
-    }
-    // dashes: true
   };
+};
+
+const drawPath = (ctx, points) => {
+  ctx.beginPath();
+  ctx.moveTo(points[0].x, points[0].y);
+  for (var i = 1; i < points.length; ++i) {
+    ctx.lineTo(points[i].x, points[i].y);
+  }
+  ctx.closePath();
+}
+
+const drawDiamondLinkPoint = (ctx, diamond, othertNode, isFrom = true) => {
+  const start = othertNode;
+  const translateXY = 8;
+  const shapeSize = diamondShape.x + translateXY;
+  const dx = start.x - diamond.x;
+  const dy = diamond.y - start.y;
+  const angle = atan(dy / dx);
+  const hypotenuse = sqrt(2 * shapeSize ** 2) / 2 / cos(PI / 4 - abs(angle));
+  const x = cos(abs(angle)) * hypotenuse * (dx < 0 ? -1 : 1);
+  const y = sin(abs(angle)) * hypotenuse * (dy < 0 ? 1 : -1);
+
+  ctx.fillStyle = _stroke_color_selected;
+
+  if (isFrom) {
+    ctx.save();
+    ctx.beginPath();
+    ctx.arc(diamond.x + x, diamond.y + y, 5, 0, 360);
+    ctx.closePath();
+    ctx.fill();
+    ctx.restore();
+    ctx.stroke();
+  }
+  if (!isFrom) {
+    ctx.save();
+    ctx.beginPath();
+    ctx.translate(diamond.x + x, diamond.y + y);
+    ctx.rotate(dx >= 0 ? -angle : PI - angle);
+    ctx.translate(-diamond.x - x, -diamond.y - y);
+    ctx.moveTo(diamond.x + x - translateXY + 2, diamond.y + y);
+    ctx.lineTo(
+      diamond.x + x + translateXY,
+      diamond.y + y - translateXY / 2
+    );
+    ctx.lineTo(
+      diamond.x + x + translateXY / 5,
+      diamond.y + y
+    );
+    ctx.lineTo(
+      diamond.x + x + translateXY,
+      diamond.y + y + translateXY / 2
+    );
+    ctx.closePath();
+    ctx.fill();
+    ctx.restore();
+  }
 };
 
 const node = (options = {}) => {
@@ -232,4 +284,4 @@ const node = (options = {}) => {
 
 const NODES = { card, proccess, diamond };
 const link = contact;
-export { contact, link, node };
+export { contact, link, node, drawDiamondLinkPoint };

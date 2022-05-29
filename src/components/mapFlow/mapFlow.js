@@ -1,21 +1,32 @@
 // import { DataSet, Network } from "vue-vis-network";
 import { DataSet, Network } from "../vueVisNetwork/visNetwork";
-import { contact, node } from "./shape";
+import { contact, node, drawDiamondLinkPoint } from "./shape";
 
 import { MODE } from "./constan";
 
-const imgCard = require('../../assets/card.png');
-const imgProccess = require('../../assets/proccess.png');
-const imgIF = require('../../assets/If.png');
+const btnStrokeColor = '#ddccdd';
 
 const btnNode = (mode, title) => {
-  return {mode, title}
+  return { mode, title }
 }
-
 const btnNodes = [
-  new btnNode(MODE.ADD_PROCCESS, `<img src="${ imgProccess }" class="img-btn-drag" style="max-width: 100%;" />`),
-  new btnNode(MODE.ADD_CARD, `<img src="${ imgCard }" class="img-btn-drag" style="max-width: 100%;" />`),
-  new btnNode(MODE.ADD_DIAMOND, `<img src="${ imgIF }" class="img-btn-drag" style="max-width: 100%;" />`),
+  new btnNode(MODE.ADD_PROCCESS, `
+  <svg width="65" height="35">
+    <ellipse cy="50%" rx="30" cx="32" ry="17" style="fill: none; stroke:${btnStrokeColor}; stroke-width:2"></ellipse>
+  </svg>
+ `),
+  new btnNode(MODE.ADD_CARD, `
+    <svg height="50" width="50">
+      <rect width="100%" height="100%" style="fill:rgba(255, 255,255, 0); stroke-width:2; stroke:${btnStrokeColor}" />
+    </svg>
+  `),
+  new btnNode(MODE.ADD_DIAMOND, `
+    <svg height="65" width="65">
+      <rect 
+        style="fill:none; stroke:${btnStrokeColor}; stroke-width:1;" height="30" width="30" y="0" x="45%" transform="matrix(1, 1, 1, -1, -25, 2)">
+      </rect>
+    </svg>
+  `),
 ];
 
 export default {
@@ -53,7 +64,6 @@ export default {
       // TEST
       // console.log('nodes', { nodes: this.nodes });
       // END TEST
-
       this.options = {
         ...this.options,
         manipulation: {
@@ -68,7 +78,10 @@ export default {
       };
     },
     getNode(nodeId) {
-      return this.nodes.get(nodeId);
+      return {
+        ...this.nodes.get(nodeId),
+        ...this.getPosition(nodeId)
+      }
     },
     getPosition(nodeId) {
       return this.map.getPositions(nodeId)[nodeId];
@@ -124,8 +137,29 @@ export default {
         this.map.addEdgeMode();
       }
     },
-    addContact(data) {
-      this.edges.add(contact(data));
+    addContact(link) {
+      const fromNode = this.getNode(link.from);
+      const toNode = this.getNode(link.to);
+      let arrows = {};
+      if (fromNode.type === MODE.DIAMOND) {
+        arrows = {
+          from: {
+            enabled: false
+          }
+        }
+      }
+      if (toNode.type === MODE.DIAMOND) {
+        arrows = {
+          ...arrows,
+          to: {
+            enabled: false
+          }
+        }
+      }
+      this.edges.add(contact({
+        ...link,
+        arrows
+      }));
       this.refreshSelectedNode();
     },
     addNode(pointer, type = "card") {
@@ -152,55 +186,28 @@ export default {
     isActionMode(mode) {
       return this.actionMode === mode;
     },
-    drawBg(ctx) {
-      // const W = ctx.canvas.width / 2;
-      // const H = ctx.canvas.height / 2;
-      // ctx.beginPath();
-      // for (let x = -W; x < W; x += 10) {
-      //   ctx.moveTo(x, -H);
-      //   ctx.lineTo(x, H);
-      // }
-      // for (let y = -H; y < H; y += 10) {
-      //   ctx.moveTo(-W, y);
-      //   ctx.lineTo(W, y);
-      // }
-      // ctx.lineWidth = 1;
-      // ctx.strokeStyle = "#ccc";
-      // ctx.stroke();
-      // ctx.closePath();
-      // console.log("draw bg", { ctx, W, H });
-      //------------
-      // var pos = this.map.getPositions([1, 2]);
-      // ctx.strokeStyle = ctx.filStyle = "green";
-      // ctx.moveTo(pos[1].x, pos[1].y);
-      // ctx.lineTo(
-      //   pos[1].x + ((pos[2].x - pos[1].x) * percent) / 100,
-      //   pos[1].y + ((pos[2].y - pos[1].y) * percent) / 100
-      // );
-      // ctx.fill();
-      // ctx.stroke();
-    },
-    controlNodeDragging(param) {
-      // console.log("controlNodeDragging", { param });
-    },
-    dragging(param) {
-      // console.log("Dragging", { param });
+    afterDrawing(ctx) {
+      const edges = this.edges.get();
+      edges.forEach((link) => {
+        const fromNode = this.getNode(link.from);
+        const toNode = this.getNode(link.to);
+        if (fromNode.type === MODE.DIAMOND) {
+          drawDiamondLinkPoint(ctx, fromNode, toNode, true);
+        }
+        if (toNode.type === MODE.DIAMOND) {
+          drawDiamondLinkPoint(ctx, toNode, fromNode, false);
+        }
+      });
     },
     selectNode(param) {
-      console.log("select node", { param });
-    },
-    edgesEvent(param) {
-      console.log(`edges ${param.event}`, { param });
-    },
-    hoverEdge(param) {
-      console.log("hover edge", { param });
+
     },
     showContextMenu(val = true) {
       this.isShowContextMenu = val;
     },
 
     test() {
-      console.log("TEST:", { nodes: this.nodes.get() });
+      console.log("TEST:",);
     }
   },
   mounted() {

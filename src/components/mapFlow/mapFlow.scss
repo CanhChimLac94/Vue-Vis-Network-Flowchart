@@ -1,4 +1,5 @@
 $active_color: #6ab8ed;
+$none_color: rgba(0, 0, 0, 0);
 $bg-img: url(../../assets/bg.png);
 
 .row {
@@ -14,16 +15,17 @@ $bg-img: url(../../assets/bg.png);
   padding: 25px 15px;
   min-width: 25px;
   width: 10%;
-  
+
   button {
-    padding: 15px 10px;
-    border: 1px solid #ddccdd;
+    padding: 5px 10px;
+    border: 1px solid rgba(0, 0, 0, 0);
     border-radius: 4px;
     margin-bottom: 10px;
     width: 100%;
+    background-color: rgba(0, 0, 0, 0);
     cursor: pointer;
     &.active {
-      border-color: $active_color;
+      border-color: $none_color;
       color: $active_color;
     }
     &.drag {
@@ -32,6 +34,14 @@ $bg-img: url(../../assets/bg.png);
     .img-btn-drag {
       max-width: 100%;
       width: 100%;
+    }
+    &.link {
+      border: 1px solid rgba(0, 0, 0, 0.5);
+      padding: 15px 10px;
+      &.active {
+        border-color: $active_color;
+        color: $active_color;
+      }
     }
   }
 }
