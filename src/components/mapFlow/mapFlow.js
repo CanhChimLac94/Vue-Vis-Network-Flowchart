@@ -4,7 +4,7 @@ import { contact, node, drawDiamondLinkPoint } from "./shape";
 
 import { MODE } from "./constan";
 
-const btnStrokeColor = '#ddccdd';
+const btnStrokeColor = '#8c8c8c';
 
 const btnNode = (mode, title) => {
   return { mode, title }
@@ -12,12 +12,12 @@ const btnNode = (mode, title) => {
 const btnNodes = [
   new btnNode(MODE.ADD_PROCCESS, `
   <svg width="65" height="35">
-    <ellipse cy="50%" rx="30" cx="32" ry="17" style="fill: none; stroke:${btnStrokeColor}; stroke-width:2"></ellipse>
+    <ellipse cy="50%" rx="30" cx="32" ry="17" style="fill: none; stroke:${btnStrokeColor}; stroke-width:1"></ellipse>
   </svg>
  `),
   new btnNode(MODE.ADD_CARD, `
     <svg height="50" width="50">
-      <rect width="100%" height="100%" style="fill:rgba(255, 255,255, 0); stroke-width:2; stroke:${btnStrokeColor}" />
+      <rect width="100%" height="100%" style="fill:rgba(255, 255,255, 0); stroke-width:1; stroke:${btnStrokeColor}" />
     </svg>
   `),
   new btnNode(MODE.ADD_DIAMOND, `
