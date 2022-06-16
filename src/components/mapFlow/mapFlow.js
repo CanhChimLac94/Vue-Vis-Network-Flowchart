@@ -174,13 +174,10 @@ export default {
     },
     updateLink(linkId, newLink) {
       const baseLink = this.getLink(linkId);
-      console.log('update link', { baseLink, linkId });
       this.edges.update([contact({
         ...baseLink,
         ...newLink
       })]);
-      console.log('linkId', { linkId, baseLink });
-      console.log('links', this.edges.get());
     },
     addNodeClick(NODE) {
       if (this.actionMode === NODE) {
