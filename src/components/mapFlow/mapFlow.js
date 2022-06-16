@@ -52,6 +52,7 @@ export default {
       actionMode: MODE.NONE,
       firstNode: null,
       secondNode: null,
+      selectedEdge: null,
       isShowContextMenu: false,
       contextMenuPosition: {
         top: "0px",
@@ -82,6 +83,9 @@ export default {
         ...this.nodes.get(nodeId),
         ...this.getPosition(nodeId)
       }
+    },
+    getLink(linkId) {
+      return this.edges.get(linkId);
     },
     getPosition(nodeId) {
       return this.map.getPositions(nodeId)[nodeId];
@@ -121,6 +125,62 @@ export default {
         this.addNode(pointer, this.actionMode);
         this.refreshSelectedNode();
       }
+    },
+    onSelectEdge(evt, selected = true) {
+      const { edges } = evt;
+      console.log('edges', { selected, evt });
+      if (edges.length <= 0 && selected) {
+        return;
+      }
+
+      let linkId = edges[0];
+      const baseLink = this.getLink(linkId);
+      this.selectedLink = baseLink;
+
+      this.updateLink(linkId, {
+        selected
+      });
+    },
+    onDeselectEdge(evt) {
+      if (this.selectedLink) {
+        this.updateLink(this.selectedLink.id, {
+          selected: false
+        });
+        this.selectedLink = null;
+      }
+    },
+    selectNode(param) {
+
+    },
+    updateNode(nodeId, newNode = {}) {
+      if (
+        !nodeId ||
+        (typeof nodeId === "string" && nodeId.includes("targetNode"))
+      ) {
+        return;
+      }
+      const baseNode = this.getNode(nodeId);
+      newNode = {
+        ...baseNode,
+        ...newNode
+      };
+      this.nodes.update(
+        node({
+          ...baseNode,
+          ...newNode
+        }),
+        nodeId
+      );
+    },
+    updateLink(linkId, newLink) {
+      const baseLink = this.getLink(linkId);
+      console.log('update link', { baseLink, linkId });
+      this.edges.update([contact({
+        ...baseLink,
+        ...newLink
+      })]);
+      console.log('linkId', { linkId, baseLink });
+      console.log('links', this.edges.get());
     },
     addNodeClick(NODE) {
       if (this.actionMode === NODE) {
@@ -199,9 +259,7 @@ export default {
         }
       });
     },
-    selectNode(param) {
 
-    },
     showContextMenu(val = true) {
       this.isShowContextMenu = val;
     },

@@ -35,6 +35,8 @@
         @select-node="selectNode"
         @on-drop="ondropMap"
         @after-drawing="afterDrawing"
+        @select-edge="onSelectEdge($event, true)"
+        @deselect-edge="onDeselectEdge"
 
       ></network>
       <!-- @after-drawing="drawBg" -->

@@ -183,8 +183,11 @@ const diamond = (options) => {
 };
 
 const contact = (options = {}) => {
+  const id = options.id || Date.now();
   const from = options.from || null;
   const to = options.to || null;
+  const selected = options.selected || false;
+  const color = selected? _stroke_color_selected : '#dcdcdc';
   if (!from || !to) {
     return;
   }
@@ -203,22 +206,26 @@ const contact = (options = {}) => {
     ...options.arrows || {},
   };
   return {
+    id,
     from,
     to,
     arrows,
     smooth: false,
     physics: false,
-    chosen: {
-      edge: (values, id, selected, hovering) => {
-      }
-    },
-    color: {
-      color: `${_stroke_color_selected}`,
-      highlight: `${_stroke_color_selected}`,
-      inherit: "from",
-      opacity: "1.0"
-    },
-    selectionWidth: 1,
+    chosen: true,
+    color,
+    // chosen: {
+    //   edge: (values, id, selected, hovering) => {
+    //   }
+    // },
+    // color: {
+    //   color: color,
+    //   highlight: color,
+    //   inherit: false,
+    //   opacity: "1.0"
+    // },
+    // selectionWidth: 1,
+    width: selected ? 2 : 1,
   };
 };
 
